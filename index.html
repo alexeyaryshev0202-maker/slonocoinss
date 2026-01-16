@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏦 Банк Слонокоин - Полный рабочий банк</title>
+    <style>
+        /* ВСТАВЬТЕ ВЕСЬ CSS КОД СЮДА */
+        /* Весь CSS из предыдущего ответа */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); color: #fff; min-height: 100vh; padding: 15px; }
+        /* ... и остальной CSS ... */
+    </style>
+</head>
+<body>
+    <div class="warning-banner" id="warningBanner">
+        <div class="warning-content">
+            <span style="font-size: 24px; margin-right: 10px;">⚠️</span>
+            <div>
+                <h3 style="margin: 0; color: #ff6b6b;">БАНК СЛОНОКОИН - ПОЛНОСТЬЮ РАБОЧИЙ БАНК</h3>
+                <p style="margin: 5px 0; color: #feca57;">Регистрируйтесь, переводите деньги, берите кредиты! Всё работает!</p>
+                <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Виртуальная валюта: SLC (Slonocoins)</p>
+            </div>
+            <button onclick="hideWarning()" style="background: none; border: 1px solid #ff6b6b; color: #ff6b6b; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin-left: auto;">✕</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ШАПКА -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">🏦</div>
+                <div>
+                    <h1>БАНК СЛОНОКОИН</h1>
+                    <p class="tagline">Самый надёжный банк в интернете!</p>
+                </div>
+            </div>
+            <div class="network-status">
+                <div class="status-dot"></div>
+                <span>Онлайн • v2.0</span>
+            </div>
+        </header>
+
+        <!-- КОНТЕНТ ДЛЯ НЕАВТОРИЗОВАННЫХ -->
+        <div id="authSection" class="tab-content active">
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-user-plus"></i> Регистрация</h3>
+                    <div class="input-group">
+                        <input type="text" id="regUsername" class="input-field" placeholder="Придумайте логин" maxlength="20">
+                        <input type="password" id="regPassword" class="input-field" placeholder="Пароль (4+ символов)">
+                        <input type="text" id="regEmail" class="input-field" placeholder="Email (необязательно)">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="register()">
+                            <i class="fas fa-user-plus"></i> Создать аккаунт
+                        </button>
+                    </div>
+                    <p style="margin-top: 15px; color: #aaa; font-size: 0.9em;">
+                        🎁 При регистрации: <strong>1000 SLC</strong> на счёт!
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-sign-in-alt"></i> Вход в банк</h3>
+                    <div class="input-group">
+                        <input type="text" id="loginUsername" class="input-field" placeholder="Ваш логин">
+                        <input type="password" id="loginPassword" class="input-field" placeholder="Ваш пароль">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-success" onclick="login()">
+                            <i class="fas fa-sign-in-alt"></i> Войти в аккаунт
+                        </button>
+                    </div>
+                    <p style="margin-top: 15px; color: #aaa; font-size: 0.9em;">
+                        🔐 Ваши данные хранятся в браузере
+                    </p>
+                </div>
+            </div>
+
+            <!-- ИНФО О БАНКЕ -->
+            <div class="card" style="margin-top: 20px;">
+                <h3><i class="fas fa-info-circle"></i> Возможности банка</h3>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="feature">
+                        <div class="feature-icon">💸</div>
+                        <h4>Мгновенные переводы</h4>
+                        <p>Переводите SLC друзьям и другим пользователям</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🏦</div>
+                        <h4>Кредиты до 10,000 SLC</h4>
+                        <p>Берите кредиты под 5% на срок до 30 дней</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">👑</div>
+                        <h4>Админ-панель</h4>
+                        <p>Управляйте банком если знаете секретный код</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <h4>Подробная статистика</h4>
+                        <p>Вся история операций и аналитика</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОСНОВНОЙ ИНТЕРФЕЙС (после входа) -->
+        <div id="mainSection" class="tab-content" style="display: none;">
+            <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+            <div class="user-header">
+                <div class="user-info">
+                    <h3 id="userGreeting">Добро пожаловать!</h3>
+                    <div class="balance-display">
+                        <div class="balance-card">
+                            <div class="balance-label"><i class="fas fa-wallet"></i> Ваш баланс</div>
+                            <div class="balance-amount" id="userBalance">0<span class="currency">SLC</span></div>
+                        </div>
+                        <div class="balance-card">
+                            <div class="balance-label"><i class="fas fa-hand-holding-usd"></i> Кредиты</div>
+                            <div class="balance-amount" id="userDebt">0<span class="currency">SLC</span></div>
+                        </div>
+                        <div class="balance-card">
+                            <div class="balance-label"><i class="fas fa-history"></i> Операций</div>
+                            <div class="balance-amount" id="userTransactions">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКИ -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('transfers')">
+                    <i class="fas fa-exchange-alt"></i> Переводы
+                </button>
+                <button class="tab-btn" onclick="showTab('friends')">
+                    <i class="fas fa-users"></i> Друзья
+                </button>
+                <button class="tab-btn" onclick="showTab('credits')">
+                    <i class="fas fa-hand-holding-usd"></i> Кредиты
+                </button>
+                <button class="tab-btn" onclick="showTab('history')">
+                    <i class="fas fa-history"></i> История
+                </button>
+                <button class="tab-btn" onclick="showTab('admin')">
+                    <i class="fas fa-crown"></i> Админка
+                </button>
+            </div>
+
+            <!-- ВКЛАДКА ПЕРЕВОДОВ -->
+            <div id="transfersTab" class="tab-content active">
+                <div class="grid">
+                    <div class="card">
+                        <h3><i class="fas fa-paper-plane"></i> Перевод другому пользователю</h3>
+                        <div class="input-group">
+                            <input type="text" id="transferTo" class="input-field" placeholder="Логин получателя">
+                            <input type="number" id="transferAmount" class="input-field" placeholder="Сумма SLC" min="1" step="1">
+                            <textarea id="transferNote" class="input-field" placeholder="Комментарий к переводу" rows="2"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-success" onclick="sendTransfer()">
+                                <i class="fas fa-paper-plane"></i> Отправить деньги
+                            </button>
+                        </div>
+                        <div id="transferInfo" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; display: none;">
+                            <p>💸 Комиссия: <span id="commissionAmount">0</span> SLC</p>
+                            <p>💰 Итого спишется: <span id="totalAmount">0</span> SLC</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-bolt"></i> Быстрые переводы</h3>
+                        <div id="quickTransfers" class="list" style="max-height: 250px;">
+                            <p style="color: #aaa; text-align: center; padding: 20px;">Добавьте друзей для быстрых переводов</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ДРУЗЕЙ -->
+            <div id="friendsTab" class="tab-content">
+                <div class="grid">
+                    <div class="card">
+                        <h3><i class="fas fa-user-plus"></i> Добавить друга</h3>
+                        <div class="input-group">
+                            <input type="text" id="friendCode" class="input-field" placeholder="Код друга">
+                            <button class="btn btn-primary" onclick="addFriend()">
+                                <i class="fas fa-user-plus"></i> Добавить
+                            </button>
+                        </div>
+                        <p style="margin-top: 15px; color: #feca57;">
+                            <i class="fas fa-qrcode"></i> Ваш код: <strong id="myFriendCode">-</strong>
+                        </p>
+                        <button class="btn btn-secondary" onclick="copyFriendCode()" style="margin-top: 10px; width: 100%;">
+                            <i class="fas fa-copy"></i> Скопировать код
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-users"></i> Мои друзья</h3>
+                        <div id="friendsList" class="list" style="max-height: 300px;">
+                            <p style="color: #aaa; text-align: center; padding: 20px;">У вас пока нет друзей</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА КРЕДИТОВ -->
+            <div id="creditsTab" class="tab-content">
+                <div class="grid">
+                    <div class="card">
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Взять кредит</h3>
+                        <div class="input-group">
+                            <input type="number" id="creditAmount" class="input-field" placeholder="Сумма кредита (100-10000)" min="100" max="10000">
+                            <input type="number" id="creditTerm" class="input-field" placeholder="Срок (дней, 1-30)" min="1" max="30">
+                            <textarea id="creditPurpose" class="input-field" placeholder="Цель кредита" rows="2"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-success" onclick="applyForCredit()">
+                                <i class="fas fa-file-signature"></i> Подать заявку
+                            </button>
+                        </div>
+                        <div id="creditInfo" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            <p>📈 Процентная ставка: <strong>5%</strong></p>
+                            <p>💸 К выплате: <span id="creditTotal">0</span> SLC</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-list-alt"></i> Мои кредиты</h3>
+                        <div id="myCredits" class="list" style="max-height: 300px;">
+                            <p style="color: #aaa; text-align: center; padding: 20px;">У вас нет активных кредитов</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="repayAllCredits()" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-money-bill-wave"></i> Погасить все кредиты
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ИСТОРИИ -->
+            <div id="historyTab" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> История операций</h3>
+                    <div id="historyList" class="list" style="max-height: 400px;">
+                        <p style="color: #aaa; text-align: center; padding: 30px;">Нет операций</p>
+                    </div>
+                    <div class="button-group" style="margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="clearHistory()">
+                            <i class="fas fa-trash"></i> Очистить историю
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportData()">
+                            <i class="fas fa-download"></i> Экспорт данных
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА АДМИНКИ -->
+            <div id="adminTab" class="tab-content">
+                <div id="adminLoginSection">
+                    <div class="card">
+                        <h3><i class="fas fa-crown"></i> Доступ администратора</h3>
+                        <p style="margin-bottom: 15px; color: #aaa;">Введите секретный код для доступа к админ-панели</p>
+                        <div class="input-group">
+                            <input type="password" id="adminCode" class="input-field" placeholder="Секретный код">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkAdminAccess()">
+                                <i class="fas fa-key"></i> Получить доступ
+                            </button>
+                        </div>
+                        <p style="margin-top: 15px; color: #777; font-size: 0.9em;">
+                            <i class="fas fa-lightbulb"></i> Подсказка: код состоит из 12 символов
+                        </p>
+                    </div>
+                </div>
+
+                <div id="adminContent" style="display: none;">
+                    <div class="card">
+                        <h3><i class="fas fa-users-cog"></i> Управление пользователями</h3>
+                        <div id="usersList" class="list" style="max-height: 300px;">
+                            <!-- Список пользователей -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-file-signature"></i> Заявки на кредиты</h3>
+                        <div id="creditApplications" class="list" style="max-height: 300px;">
+                            <!-- Заявки на кредиты -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> Статистика банка</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 0.9em; color: #aaa;">Всего пользователей</div>
+                                <div style="font-size: 1.8em; font-weight: bold; color: #2ecc71;" id="totalUsers">0</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 0.9em; color: #aaa;">Общая сумма SLC</div>
+                                <div style="font-size: 1.8em; font-weight: bold; color: #feca57;" id="totalSLC">0</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 0.9em; color: #aaa;">Выдано кредитов</div>
+                                <div style="font-size: 1.8em; font-weight: bold; color: #3498db;" id="totalCredits">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- СООБЩЕНИЯ -->
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <!-- СКРИПТ -->
+    <script>
+        // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+        let users = {};
+        let currentUser = null;
+        let isAdmin = false;
+        let credits = [];
+        let creditApplications = [];
+        let transactions = [];
+        
+        const ADMIN_CODE = "SLCADMIN2024";
+        const COMMISSION_RATE = 0.05; // 5%
+        const CREDIT_INTEREST = 0.05; // 5%
+        const INITIAL_BALANCE = 1000;
+
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+            updateTransferInfo();
+            
+            // Автовход если был
+            const lastUser = localStorage.getItem('last_user');
+            if (lastUser && users[lastUser]) {
+                document.getElementById('loginUsername').value = lastUser;
+            }
+            
+            // Обновление информации о кредите
+            document.getElementById('creditAmount')?.addEventListener('input', updateCreditInfo);
+            document.getElementById('creditTerm')?.addEventListener('input', updateCreditInfo);
+            document.getElementById('transferAmount')?.addEventListener('input', updateTransferInfo);
+        });
+
+        function hideWarning() {
+            document.getElementById('warningBanner').style.display = 'none';
+        }
+
+        // ==================== СОХРАНЕНИЕ ДАННЫХ ====================
+        function loadAllData() {
+            try {
+                const saved = localStorage.getItem('slonocoin_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    users = data.users || {};
+                    credits = data.credits || [];
+                    creditApplications = data.creditApplications || [];
+                    transactions = data.transactions || [];
+                }
+            } catch (e) {
+                users = {};
+                credits = [];
+                creditApplications = [];
+                transactions = [];
+            }
+        }
+
+        function saveAllData() {
+            const data = {
+                users,
+                credits,
+                creditApplications,
+                transactions,
+                lastSave: new Date().toISOString()
+            };
+            localStorage.setItem('slonocoin_data', JSON.stringify(data));
+        }
+
+        // ==================== АВТОРИЗАЦИЯ ====================
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const email = document.getElementById('regEmail').value.trim();
+
+            if (!username || username.length < 3) {
+                showMessage('Логин должен быть от 3 символов!', 'error');
+                return;
+            }
+
+            if (!password || password.length < 4) {
+                showMessage('Пароль должен быть от 4 символов!', 'error');
+                return;
+            }
+
+            if (users[username]) {
+                showMessage('Этот логин уже занят!', 'error');
+                return;
+            }
+
+            // Создаем пользователя
+            users[username] = {
+                password: password,
+                email: email || '',
+                balance: INITIAL_BALANCE,
+                friends: [],
+                friendCode: generateFriendCode(),
+                transactions: [],
+                credits: [],
+                joined: new Date().toISOString(),
+                isAdmin: username.toLowerCase() === 'admin'
+            };
+
+            saveAllData();
+            showMessage(`✅ Аккаунт создан! На ваш счёт зачислено ${INITIAL_BALANCE} SLC`, 'success');
+            
+            // Очищаем поля
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regEmail').value = '';
+            
+            // Автовход
+            document.getElementById('loginUsername').value = username;
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users[username];
+            if (!user) {
+                showMessage('Пользователь не найден!', 'error');
+                return;
+            }
+
+            if (user.password !== password) {
+                showMessage('Неверный пароль!', 'error');
+                return;
+            }
+
+            currentUser = username;
+            isAdmin = user.isAdmin || false;
+
+            // Переключаем интерфейс
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainSection').style.display = 'block';
+            
+            // Сохраняем для авто-входа
+            localStorage.setItem('last_user', username);
+            
+            // Обновляем данные
+            updateUserDisplay();
+            loadFriends();
+            loadCredits();
+            loadHistory();
+            updateQuickTransfers();
+            
+            showMessage(`✅ Добро пожаловать, ${username}! Ваш баланс: ${user.balance} SLC`, 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('mainSection').style.display = 'none';
+            
+            // Очищаем поля
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            localStorage.removeItem('last_user');
+            showMessage('Вы вышли из системы', 'info');
+        }
+
+        // ==================== ПЕРЕВОДЫ ====================
+        function updateTransferInfo() {
+            const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
+            if (amount > 0) {
+                const commission = amount * COMMISSION_RATE;
+                const total = amount + commission;
+                
+                document.getElementById('transferInfo').style.display = 'block';
+                document.getElementById('commissionAmount').textContent = commission.toFixed(2);
+                document.getElementById('totalAmount').textContent = total.toFixed(2);
+            } else {
+                document.getElementById('transferInfo').style.display = 'none';
+            }
+        }
+
+        function sendTransfer() {
+            if (!currentUser) return;
+            
+            const to = document.getElementById('transferTo').value.trim();
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const note = document.getElementById('transferNote').value.trim();
+
+            if (!to) {
+                showMessage('Введите логин получателя!', 'error');
+                return;
+            }
+
+            if (!amount || amount <= 0) {
+                showMessage('Введите корректную сумму!', 'error');
+                return;
+            }
+
+            if (!users[to]) {
+                showMessage('Получатель не найден!', 'error');
+                return;
+            }
+
+            if (to === currentUser) {
+                showMessage('Нельзя переводить самому себе!', 'error');
+                return;
+            }
+
+            const commission = amount * COMMISSION_RATE;
+            const total = amount + commission;
+
+            const sender = users[currentUser];
+            if (sender.balance < total) {
+                showMessage(`Недостаточно средств! Нужно: ${total.toFixed(2)} SLC`, 'error');
+                return;
+            }
+
+            // Выполняем перевод
+            sender.balance -= total;
+            users[to].balance += amount;
+
+            // Записываем транзакции
+            const transaction = {
+                id: Date.now(),
+                from: currentUser,
+                to: to,
+                amount: amount,
+                commission: commission,
+                note: note,
+                time: new Date().toISOString(),
+                type: 'transfer'
+            };
+
+            sender.transactions.unshift(transaction);
+            users[to].transactions.unshift({
+                ...transaction,
+                type: 'receive'
+            });
+
+            transactions.unshift(transaction);
+
+            saveAllData();
+            
+            // Очищаем поля
+            document.getElementById('transferTo').value = '';
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('transferNote').value = '';
+            
+            // Обновляем интерфейс
+            updateUserDisplay();
+            loadHistory();
+            updateTransferInfo();
+            
+            showMessage(`✅ Перевод ${amount} SLC пользователю ${to} выполнен!`, 'success');
+        }
+
+        // ==================== ДРУЗЬЯ ====================
+        function generateFriendCode() {
+            return 'SLC-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+
+        function copyFriendCode() {
+            const code = users[currentUser]?.friendCode;
+            if (code) {
+                navigator.clipboard.writeText(code);
+                showMessage('Код скопирован!', 'success');
+            }
+        }
+
+        function loadFriends() {
+            const user = users[currentUser];
+            if (!user) return;
+            
+            const container = document.getElementById('friendsList');
+            const myCode = document.getElementById('myFriendCode');
+            
+            myCode.textContent = user.friendCode;
+            
+            if (user.friends && user.friends.length > 0) {
+                container.innerHTML = user.friends.map(friend => `
+                    <div class="list-item">
+                        <div>
+                            <strong>👤 ${friend}</strong>
+                            <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9em;">
+                                Баланс: ${users[friend]?.balance || 0} SLC
+                            </p>
+                        </div>
+                        <button class="btn btn-small btn-primary" onclick="sendToFriend('${friend}')">
+                            <i class="fas fa-paper-plane"></i> Перевести
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">У вас пока нет друзей</p>';
+            }
+        }
+
+        function updateQuickTransfers() {
+            const user = users[currentUser];
+            if (!user || !user.friends || user.friends.length === 0) return;
+            
+            const container = document.getElementById('quickTransfers');
+            container.innerHTML = user.friends.map(friend => `
+                <div class="list-item" style="cursor: pointer;" onclick="quickTransfer('${friend}')">
+                    <div>
+                        <strong>👤 ${friend}</strong>
+                        <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9em;">
+                            ${users[friend]?.balance || 0} SLC
+                        </p>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            `).join('');
+        }
+
+        function addFriend() {
+            const code = document.getElementById('friendCode').value.trim();
+            if (!code) {
+                showMessage('Введите код друга!', 'error');
+                return;
+            }
+
+            // Находим пользователя по коду
+            let friendUsername = null;
+            for (const [username, user] of Object.entries(users)) {
+                if (user.friendCode === code && username !== currentUser) {
+                    friendUsername = username;
+                    break;
+                }
+            }
+
+            if (!friendUsername) {
+                showMessage('Код не найден или принадлежит вам!', 'error');
+                return;
+            }
+
+            const user = users[currentUser];
+            if (user.friends.includes(friendUsername)) {
+                showMessage('Этот пользователь уже у вас в друзьях!', 'error');
+                return;
+            }
+
+            user.friends.push(friendUsername);
+            saveAllData();
+            loadFriends();
+            updateQuickTransfers();
+            
+            document.getElementById('friendCode').value = '';
+            showMessage(`✅ Пользователь ${friendUsername} добавлен в друзья!`, 'success');
+        }
+
+        function sendToFriend(friend) {
+            document.getElementById('transferTo').value = friend;
+            document.getElementById('transferAmount').focus();
+            showTab('transfers');
+        }
+
+        function quickTransfer(friend) {
+            const amount = prompt(`Сколько SLC перевести ${friend}?`, "100");
+            if (amount && !isNaN(parseFloat(amount))) {
+                document.getElementById('transferTo').value = friend;
+                document.getElementById('transferAmount').value = amount;
+                sendTransfer();
+            }
+        }
+
+        // ==================== КРЕДИТЫ ====================
+        function updateCreditInfo() {
+            const amount = parseFloat(document.getElementById('creditAmount').value) || 0;
+            const term = parseFloat(document.getElementById('creditTerm').value) || 1;
+            
+            if (amount > 0 && term > 0) {
+                const total = amount * (1 + CREDIT_INTEREST);
+                document.getElementById('creditTotal').textContent = total.toFixed(2);
+            }
+        }
+
+        function applyForCredit() {
+            const amount = parseFloat(document.getElementById('creditAmount').value);
+            const term = parseFloat(document.getElementById('creditTerm').value);
+            const purpose = document.getElementById('creditPurpose').value.trim();
+
+            if (!amount || amount < 100 || amount > 10000) {
+                showMessage('Сумма кредита должна быть от 100 до 10,000 SLC!', 'error');
+                return;
+            }
+
+            if (!term || term < 1 || term > 30) {
+                showMessage('Срок кредита должен быть от 1 до 30 дней!', 'error');
+                return;
+            }
+
+            const total = amount * (1 + CREDIT_INTEREST);
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + term);
+
+            const application = {
+                id: Date.now(),
+                user: currentUser,
+                amount: amount,
+                term: term,
+                total: total,
+                purpose: purpose || 'Не указана',
+                dueDate: dueDate.toISOString(),
+                status: 'pending',
+                appliedAt: new Date().toISOString()
+            };
+
+            creditApplications.push(application);
+            saveAllData();
+            
+            // Очищаем поля
+            document.getElementById('creditAmount').value = '';
+            document.getElementById('creditTerm').value = '';
+            document.getElementById('creditPurpose').value = '';
+            
+            showMessage('✅ Заявка на кредит отправлена! Ожидайте одобрения.', 'success');
+            updateCreditInfo();
+        }
+
+        function loadCredits() {
+            const user = users[currentUser];
+            if (!user) return;
+            
+            const container = document.getElementById('myCredits');
+            const userCredits = credits.filter(c => c.user === currentUser && c.status === 'active');
+            
+            if (userCredits.length > 0) {
+                container.innerHTML = userCredits.map(credit => `
+                    <div class="list-item ${new Date(credit.dueDate) < new Date() ? 'error' : 'success'}">
+                        <div>
+                            <strong>${credit.amount} SLC</strong>
+                            <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9em;">
+                                📅 До ${new Date(credit.dueDate).toLocaleDateString()}
+                            </p>
+                            <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9em;">
+                                💸 К выплате: ${credit.total.toFixed(2)} SLC
+                            </p>
+                        </div>
+                        <button class="btn btn-small btn-success" onclick="repayCredit(${credit.id})">
+                            <i class="fas fa-money-bill-wave"></i> Погасить
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">У вас нет активных кредитов</p>';
+            }
+            
+            // Обновляем общий долг
+            const totalDebt = userCredits.reduce((sum, credit) => sum + credit.total, 0);
+            document.getElementById('userDebt').innerHTML = `${totalDebt.toFixed(2)}<span class="currency">SLC</span>`;
+        }
+
+        function repayCredit(creditId) {
+            const credit = credits.find(c => c.id === creditId);
+            if (!credit) return;
+            
+            const user = users[currentUser];
+            if (user.balance < credit.total) {
+                showMessage(`Недостаточно средств! Нужно: ${credit.total.toFixed(2)} SLC`, 'error');
+                return;
+            }
+            
+            user.balance -= credit.total;
+            credit.status = 'repaid';
+            credit.repaidAt = new Date().toISOString();
+            
+            saveAllData();
+            updateUserDisplay();
+            loadCredits();
+                        showMessage(`✅ Кредит погашен! Списанно ${credit.total.toFixed(2)} SLC`, 'success');
+        }
+
+        function repayAllCredits() {
+            const user = users[currentUser];
+            const userCredits = credits.filter(c => c.user === currentUser && c.status === 'active');
+            
+            if (userCredits.length === 0) {
+                showMessage('У вас нет активных кредитов для погашения', 'info');
+                return;
+            }
+            
+            const totalToPay = userCredits.reduce((sum, credit) => sum + credit.total, 0);
+            
+            if (user.balance < totalToPay) {
+                showMessage(`Недостаточно средств! Нужно: ${totalToPay.toFixed(2)} SLC`, 'error');
+                return;
+            }
+            
+            if (!confirm(`Погасить все кредиты? Будет списано ${totalToPay.toFixed(2)} SLC`)) {
+                return;
+            }
+            
+            user.balance -= totalToPay;
+            userCredits.forEach(credit => {
+                credit.status = 'repaid';
+                credit.repaidAt = new Date().toISOString();
+            });
+            
+            saveAllData();
+            updateUserDisplay();
+            loadCredits();
+            
+            showMessage(`✅ Все кредиты погашены! Списанно ${totalToPay.toFixed(2)} SLC`, 'success');
+        }
+
+        // ==================== ИСТОРИЯ ====================
+        function loadHistory() {
+            const user = users[currentUser];
+            if (!user) return;
+            
+            const container = document.getElementById('historyList');
+            const userTransactions = user.transactions.slice(0, 20);
+            
+            if (userTransactions.length > 0) {
+                container.innerHTML = userTransactions.map(tx => {
+                    let icon = '🔄';
+                    let text = '';
+                    
+                    if (tx.type === 'transfer') {
+                        icon = '📤';
+                        text = `Перевод ${tx.to}: -${tx.amount} SLC`;
+                    } else if (tx.type === 'receive') {
+                        icon = '📥';
+                        text = `От ${tx.from}: +${tx.amount} SLC`;
+                    } else if (tx.type === 'credit') {
+                        icon = '🏦';
+                        text = `Кредит: +${tx.amount} SLC`;
+                    } else if (tx.type === 'repayment') {
+                        icon = '💸';
+                        text = `Погашение кредита: -${tx.amount} SLC`;
+                    }
+                    
+                    return `
+                        <div class="list-item ${tx.type === 'receive' ? 'success' : ''}">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-size: 1.2em;">${icon}</span>
+                                    <div>
+                                        <strong>${text}</strong>
+                                        <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9em;">
+                                            ${new Date(tx.time).toLocaleString()}
+                                        </p>
+                                        ${tx.note ? `<p style="margin: 5px 0 0; color: #777; font-size: 0.85em;">${tx.note}</p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            ${tx.commission ? `<span style="color: #e74c3c; font-weight: bold;">-${tx.commission.toFixed(2)} SLC</span>` : ''}
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.innerHTML = '<p style="color: #aaa; text-align: center; padding: 30px;">Нет операций</p>';
+            }
+            
+            document.getElementById('userTransactions').textContent = user.transactions.length;
+        }
+
+        function clearHistory() {
+            if (!confirm('Очистить всю историю операций?')) return;
+            
+            const user = users[currentUser];
+            user.transactions = [];
+            saveAllData();
+            loadHistory();
+            showMessage('История очищена', 'info');
+        }
+
+        function exportData() {
+            const user = users[currentUser];
+            const data = {
+                user: currentUser,
+                balance: user.balance,
+                transactions: user.transactions,
+                friends: user.friends,
+                credits: credits.filter(c => c.user === currentUser),
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `slonocoin_${currentUser}_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('Данные экспортированы в файл', 'success');
+        }
+
+        // ==================== АДМИН-ПАНЕЛЬ ====================
+        function checkAdminAccess() {
+            const code = document.getElementById('adminCode').value.trim();
+            
+            if (code === ADMIN_CODE) {
+                isAdmin = true;
+                users[currentUser].isAdmin = true;
+                saveAllData();
+                
+                document.getElementById('adminLoginSection').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadAdminData();
+                
+                showMessage('✅ Доступ администратора предоставлен!', 'success');
+            } else {
+                showMessage('❌ Неверный код доступа!', 'error');
+            }
+        }
+
+        function loadAdminData() {
+            if (!isAdmin) return;
+            
+            // Пользователи
+            const usersContainer = document.getElementById('usersList');
+            const userList = Object.entries(users).filter(([name]) => name !== 'admin');
+            
+            usersContainer.innerHTML = userList.map(([username, user]) => {
+                const userCredits = credits.filter(c => c.user === username && c.status === 'active');
+                const totalDebt = userCredits.reduce((sum, c) => sum + c.total, 0);
+                
+                return `
+                    <div class="list-item">
+                        <div style="flex: 1;">
+                            <strong>👤 ${username}</strong>
+                            <div style="display: flex; gap: 15px; margin-top: 5px; font-size: 0.9em;">
+                                <span style="color: #2ecc71;">💳 ${user.balance} SLC</span>
+                                <span style="color: #e74c3c;">🏦 ${totalDebt.toFixed(2)} SLC</span>
+                                <span style="color: #3498db;">👥 ${user.friends?.length || 0}</span>
+                            </div>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-small btn-success" onclick="adminAddMoney('${username}')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-small btn-primary" onclick="editUser('${username}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${username !== currentUser ? `
+                                <button class="btn btn-small btn-danger" onclick="deleteUser('${username}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Заявки на кредиты
+            const appsContainer = document.getElementById('creditApplications');
+            const pendingApps = creditApplications.filter(app => app.status === 'pending');
+            
+            if (pendingApps.length > 0) {
+                appsContainer.innerHTML = pendingApps.map(app => `
+                    <div class="list-item">
+                        <div style="flex: 1;">
+                            <strong>👤 ${app.user}</strong>
+                            <p style="margin: 5px 0; color: #aaa;">
+                                ${app.amount} SLC на ${app.term} дней
+                            </p>
+                            <p style="margin: 0; color: #777; font-size: 0.9em;">
+                                Цель: ${app.purpose}
+                            </p>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-small btn-success" onclick="approveCredit(${app.id})">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-small btn-danger" onclick="rejectCredit(${app.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                appsContainer.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">Нет заявок на одобрение</p>';
+            }
+            
+            // Статистика
+            document.getElementById('totalUsers').textContent = userList.length;
+            const totalSLC = userList.reduce((sum, [_, user]) => sum + user.balance, 0);
+            document.getElementById('totalSLC').textContent = Math.round(totalSLC);
+            document.getElementById('totalCredits').textContent = credits.filter(c => c.status === 'active').length;
+        }
+
+        function adminAddMoney(username) {
+            const amount = prompt(`Сколько SLC добавить пользователю ${username}?`, "100");
+            if (amount && !isNaN(parseFloat(amount))) {
+                users[username].balance += parseFloat(amount);
+                saveAllData();
+                loadAdminData();
+                if (username === currentUser) updateUserDisplay();
+                showMessage(`✅ Пользователю ${username} добавлено ${amount} SLC`, 'success');
+            }
+        }
+
+        function editUser(username) {
+            const user = users[username];
+            const newBalance = prompt(`Текущий баланс: ${user.balance} SLC\nВведите новый баланс:`, user.balance);
+            if (newBalance && !isNaN(parseFloat(newBalance))) {
+                user.balance = parseFloat(newBalance);
+                saveAllData();
+                loadAdminData();
+                if (username === currentUser) updateUserDisplay();
+                showMessage(`✅ Баланс пользователя ${username} изменён`, 'success');
+            }
+        }
+
+        function deleteUser(username) {
+            if (!confirm(`Удалить пользователя ${username}? Все его данные будут потеряны!`)) return;
+            
+            delete users[username];
+            credits = credits.filter(c => c.user !== username);
+            creditApplications = creditApplications.filter(app => app.user !== username);
+            
+            // Удаляем из друзей у других пользователей
+            Object.values(users).forEach(user => {
+                if (user.friends) {
+                    user.friends = user.friends.filter(friend => friend !== username);
+                }
+            });
+            
+            saveAllData();
+            loadAdminData();
+            showMessage(`✅ Пользователь ${username} удалён`, 'success');
+        }
+
+        function approveCredit(appId) {
+            const app = creditApplications.find(a => a.id === appId);
+            if (!app) return;
+            
+            // Выдаем кредит
+            const credit = {
+                id: Date.now(),
+                user: app.user,
+                amount: app.amount,
+                total: app.total,
+                term: app.term,
+                dueDate: app.dueDate,
+                issuedAt: new Date().toISOString(),
+                status: 'active',
+                purpose: app.purpose
+            };
+            
+            credits.push(credit);
+            users[app.user].balance += app.amount;
+            app.status = 'approved';
+            
+            // Добавляем транзакцию
+            users[app.user].transactions.unshift({
+                id: Date.now(),
+                type: 'credit',
+                amount: app.amount,
+                time: new Date().toISOString(),
+                note: `Выдача кредита: ${app.purpose}`
+            });
+            
+            saveAllData();
+            loadAdminData();
+            if (app.user === currentUser) {
+                updateUserDisplay();
+                loadCredits();
+            }
+            
+            showMessage(`✅ Кредит для ${app.user} одобрен!`, 'success');
+        }
+
+        function rejectCredit(appId) {
+            const app = creditApplications.find(a => a.id === appId);
+            if (!app) return;
+            
+            app.status = 'rejected';
+            saveAllData();
+            loadAdminData();
+            showMessage(`❌ Заявка от ${app.user} отклонена`, 'info');
+        }
+
+        // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+        function showTab(tabName) {
+            // Скрываем все вкладки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+                tab.classList.remove('active');
+            });
+            
+            // Убираем активность у всех кнопок
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Показываем нужную вкладку
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            // Активируем кнопку
+            const activeBtn = document.querySelector(`.tab-btn[onclick="showTab('${tabName}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // Обновляем данные если нужно
+            if (tabName === 'friends') loadFriends();
+            if (tabName === 'credits') loadCredits();
+            if (tabName === 'history') loadHistory();
+            if (tabName === 'admin' && isAdmin) loadAdminData();
+        }
+
+        function updateUserDisplay() {
+            if (!currentUser) return;
+            
+            const user = users[currentUser];
+            document.getElementById('userGreeting').textContent = `👋 Привет, ${currentUser}!`;
+            document.getElementById('userBalance').innerHTML = `${user.balance.toFixed(2)}<span class="currency">SLC</span>`;
+            
+            // Обновляем долг
+            const userCredits = credits.filter(c => c.user === currentUser && c.status === 'active');
+            const totalDebt = userCredits.reduce((sum, credit) => sum + credit.total, 0);
+            document.getElementById('userDebt').innerHTML = `${totalDebt.toFixed(2)}<span class="currency">SLC</span>`;
+        }
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+                messageEl.textContent = '';
+            }, 3000);
+        }
+
+        // ==================== CSS ДЛЯ ПРЕДУПРЕЖДЕНИЯ ====================
+        const style = document.createElement('style');
+        style.textContent = `
+            .warning-banner {
+                background: linear-gradient(90deg, #ff6b6b, #ee5a52);
+                color: white;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 10px;
+                animation: pulseWarning 2s infinite;
+            }
+            
+            @keyframes pulseWarning {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.9; }
+            }
+            
+            .warning-content {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .feature {
+                background: rgba(255, 255, 255, 0.05);
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+            }
+            
+            .feature-icon {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+            
+            .feature h4 {
+                margin: 10px 0 5px;
+                color: #feca57;
+            }
+            
+            .feature p {
+                color: #aaa;
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            
+            .logo-icon {
+                font-size: 2.5em;
+            }
+            
+            .user-actions {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .btn-small {
+                padding: 6px 12px;
+                font-size: 0.8em;
+                min-width: auto;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ==================== ИНИЦИАЛИЗАЦИЯ АДМИНА ====================
+        function initializeAdmin() {
+            if (!users['admin']) {
+                users['admin'] = {
+                    password: 'admin123',
+                    email: '',
+                    balance: 10000,
+                    friends: [],
+                    friendCode: 'ADMIN-SLC',
+                    transactions: [],
+                    credits: [],
+                    joined: new Date().toISOString(),
+                    isAdmin: true
+                };
+                saveAllData();
+            }
+        }
+
+        // Запускаем инициализацию при загрузке
+        initializeAdmin();
+    </script>
+
+    <footer>
+        <p>🏦 <strong>БАНК СЛОНОКОИН</strong> • Полностью рабочий банк с виртуальной валютой SLC</p>
+        <p style="margin-top: 10px; color: #aaa; font-size: 0.8em;">
+            💡 Подсказка: Для доступа к админке используйте код: <code style="background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 3px;">SLCADMIN2024</code>
+        </p>
+    </footer>
+</body>
+</html>
